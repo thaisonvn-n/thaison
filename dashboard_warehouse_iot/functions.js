@@ -1,4 +1,3 @@
-
 function updateClock() {
   const now = new Date();
   let h = now.getHours(),
@@ -169,6 +168,9 @@ function chuyenKhoDuLieu(khoId) {
         baochayEl.innerText = "An toàn";
         baochayEl.style.color = "var(--neon-green)";
         panelFire.classList.remove("fire-active", "warning-active");
+        // Chỉ ghi nhận nhiệt độ này là "an toàn" khi bơm đang tắt,
+        // để không lưu nhầm giá trị 0 (do chính bơm gây ra) làm mốc phục hồi
+        if (!isPumpOn) nhietDoAnToanGanNhat = tempValue;
       }
     }
   });
@@ -308,6 +310,7 @@ labelLight.addEventListener("click", function () {
 
 
 let nhietDoLuuTru = 0;
+let nhietDoAnToanGanNhat = 25; // nhiệt độ an toàn gần nhất trước khi cháy, mặc định 25°C
 let chuKyPhucHoi = null;
 let isPumpOn = false;
 
@@ -319,7 +322,8 @@ function turnPumpOn(khoId) {
   firebase.database().ref().child(khoId).child("Bom chua chay").set(1);
 
   if (chuKyPhucHoi) clearInterval(chuKyPhucHoi);
-  if (Number(nhietDoHienTai) > 0) nhietDoLuuTru = Number(nhietDoHienTai);
+  // Dùng nhiệt độ AN TOÀN gần nhất để phục hồi, KHÔNG dùng nhiệt độ lúc cháy (vì đó chính là ngưỡng gây cháy)
+  nhietDoLuuTru = nhietDoAnToanGanNhat;
 
   firebase.database().ref().child(khoId).child("Nhiet do").set(0);
 }
