@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Warehouse IoT Dashboard</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="dashboard-frame">
+      <header class="top-header">
+        <div class="header-left">
+          <div class="logo"><i class="fa-solid fa-microchip"></i> HTE LOGO</div>
+        </div>
+        <div class="project-title">
+          <h2>HỆ THỐNG QUẢN LÝ NHÀ KHO IOT</h2>
+        </div>
+        <div class="header-right">
+          <select id="warehouse-select">
+            <option value="khoA">Nhà kho A</option>
+            <option value="khoB">Nhà kho B</option>
+            <option value="khoC">Nhà kho C</option>
+          </select>
+          <button id="theme-toggle" class="theme-btn">
+            <i class="fa-solid fa-sun"></i>
+          </button>
+        </div>
+      </header>
+
+      <div class="layout-body">
+        <div class="col-left">
+          <div class="panel clock-panel">
+            <div class="panel-title">ĐỒNG HỒ REAL TIME</div>
+            <div
+              class="clock-display"
+              style="font-size: 2.8rem; margin: 10px 0"
+            >
+              <span id="hours">00</span><span class="colon">:</span
+              ><span id="minutes">00</span><span class="colon">:</span
+              ><span id="seconds">00</span>
+            </div>
+            <div
+              class="date-display"
+              id="current-date"
+              style="font-size: 0.9rem"
+            >
+              Thứ Hai, 01/01/2026
+            </div>
+          </div>
+
+          <div class="panel video-panel">
+                    <div class="panel-title">VIDEO (CAMERA FEED)</div>
+                    <div class="video-placeholder" id="video-container" style="padding: 0;">
+                        <!-- Thẻ video đã được chèn đúng vị trí -->
+                        <video id="webcam-feed" autoplay playsinline muted></video>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-middle">
+          <div class="grid-3">
+            <div
+              class="panel device-label"
+              id="label-fan"
+              style="cursor: pointer"
+            >
+              <i class="fa-solid fa-fan"></i> QUẠT HÚT
+            </div>
+            <div
+              class="panel device-label"
+              id="label-light"
+              style="cursor: pointer"
+            >
+              <i class="fa-solid fa-lightbulb"></i> ĐÈN KHO
+            </div>
+            <div
+              class="panel device-label"
+              style="color: var(--neon-red); border-color: var(--neon-red)"
+            >
+              <i class="fa-solid fa-fire-extinguisher"></i> BƠM CỨU HỎA
+            </div>
+          </div>
+
+          <div class="grid-3 controls-row">
+            <div class="control-box flex-col">
+              <label
+                for="slider-quat"
+                style="
+                  font-size: 0.8rem;
+                  margin-bottom: 5px;
+                  color: var(--text-muted);
+                "
+                >Tốc độ: <span id="quat-val">0</span>%</label
+              >
+              <input
+                type="range"
+                id="slider-quat"
+                min="0"
+                max="100"
+                value="0"
+                class="thanh-keo"
+              />
+            </div>
+            <div class="control-box flex-center">
+              <label class="switch"
+                ><input type="checkbox" id="switch-light" /><span
+                  class="slider"
+                ></span
+              ></label>
+            </div>
+            <div class="control-box flex-center gap-10">
+              <button id="btn-pump-on" class="btn-action on">ON</button>
+              <button id="btn-pump-off" class="btn-action off active">
+                OFF
+              </button>
+            </div>
+          </div>
+
+          <div class="grid-3">
+            <div class="panel sensor-box" id="panel-fire">
+              <div class="panel-title">
+                <i class="fa-solid fa-temperature-half"></i> NHIỆT ĐỘ
+              </div>
+              <h3 id="nhietdo" style="font-size: 2rem; margin: 10px 0">--°C</h3>
+              <p
+                id="baochay"
+                style="
+                  font-size: 0.85rem;
+                  color: var(--neon-green);
+                  font-weight: bold;
+                "
+              >
+                An toàn
+              </p>
+            </div>
+            <div class="panel sensor-box">
+              <div class="panel-title">
+                <i class="fa-solid fa-boxes-stacked"></i> SỐ LƯỢNG
+              </div>
+              <h3 id="soluong" style="font-size: 2rem; margin: 10px 0">--</h3>
+              <p style="font-size: 0.85rem; color: var(--text-muted)">
+                thùng hàng
+              </p>
+            </div>
+            <div class="panel sensor-box flex-col">
+              <div class="panel-title">
+                <i class="fa-solid fa-percent"></i> LẤP ĐẦY
+              </div>
+              <div
+                class="progress-ring"
+                style="width: 50px; height: 50px; margin-top: 5px"
+              >
+                <div
+                  class="progress-inner"
+                  id="lapday-vongtron"
+                  style="width: 35px; height: 35px; font-size: 0.75rem"
+                >
+                  --%
+                </div>
+              </div>
+            </div>
+            <div style="margin-top: 25px; padding-top: 15px; border-top: 1px dashed var(--border-color); color: var(--text-muted); font-size: 0.85rem; font-weight: 500; letter-spacing: 0.5px;">
+                    <div style="display: flex; justify-content: space-around; align-items: center; text-align: center;">
+                        
+                        <div>
+                            <strong style="color: var(--neon-blue); font-size: 1rem;">Nguyễn Đình Bình</strong> MSSV:<br>
+                            23161105
+                        </div>
+                        
+                        <div style="width: 1px; height: 35px; background-color: var(--border-color);"></div>
+
+                        <div>
+                            <strong style="color: var(--neon-blue); font-size: 1rem;">Nguyễn Phan Thái Sơn</strong> MSSV:<br>
+                            23161177
+            </div>
+          </div>
+        </div>
+
+        <div class="col-right">
+          <div class="panel chart-panel">
+            <div class="panel-title">BIỂU ĐỒ THỜI GIAN THỰC</div>
+            <div class="canvas-container">
+              <canvas id="mainChart"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.2.10/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.2.10/firebase-database.js"></script>
+    <script src="functions.js"></script>
+  </body>
+</html>
